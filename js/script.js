@@ -13,6 +13,35 @@ navLinks.forEach(link => {
     });
 });
 
+/* ================= THEME TOGGLE ================= */
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = themeToggle ? themeToggle.querySelector(".theme-toggle-icon") : null;
+const savedTheme = (() => {
+    try { return localStorage.getItem("portfolio-theme"); } catch (error) { return null; }
+})();
+
+function applyTheme(theme) {
+    document.body.dataset.theme = theme;
+    if (themeIcon) themeIcon.textContent = theme === "light" ? "☾" : "☼";
+    if (themeToggle) {
+        const label = theme === "light" ? "Aktifkan tema gelap" : "Aktifkan tema terang";
+        themeToggle.setAttribute("aria-label", label);
+        themeToggle.setAttribute("title", label);
+    }
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute("content", theme === "light" ? "#f5f7fb" : "#0b0d10");
+}
+
+applyTheme(savedTheme === "light" ? "light" : "dark");
+if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+        const nextTheme = document.body.dataset.theme === "light" ? "dark" : "light";
+        applyTheme(nextTheme);
+        try { localStorage.setItem("portfolio-theme", nextTheme); } catch (error) { /* Theme still works for this visit. */ }
+    });
+}
+
+
 /* ================= CERTIFICATE MODAL ================= */
 
 const certificateModal = document.getElementById("certificateModal");
